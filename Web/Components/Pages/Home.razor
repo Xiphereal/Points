@@ -1,44 +1,46 @@
 ﻿@page "/"
+@using Web.Repositories
 @rendermode InteractiveServer
 
 <PageTitle>Points</PageTitle>
 
 <h1>The points for this week:</h1>
 
-<p role="status">@points/@idealPoints</p>
+<p role="status">@inMemoryRepository.Points/@inMemoryRepository.IdealPoints</p>
 
 <button class="btn btn-primary" @onclick="ContributeWith20Points">+20</button>
 <button class="btn btn-primary" @onclick="Miss20Points">-20</button>
 <button class="btn btn-primary" @onclick="ContributeWithBonus">Bonus!</button>
 
-<br/> 
+<br/>
 
 <button class="btn btn-primary" @onclick="ResetPoints">Reset points</button>
 
 @code {
-    private int points = 0;
-    private int idealPoints = 0;
+    private InMemoryRepository inMemoryRepository;
+    
+    protected override void OnInitialized()
+    {
+        inMemoryRepository = new InMemoryRepository();
+    }
 
     private void ContributeWith20Points()
     {
-        points += 20;
-        idealPoints += 20;
+        inMemoryRepository.ContributeWith(20);
     }
 
     private void Miss20Points()
     {
-        idealPoints += 20;
+        inMemoryRepository.AddIdealPoints(20);
     }
 
     private void ContributeWithBonus()
     {
-        points += 10;
-        idealPoints += 10;
+        inMemoryRepository.ContributeWith(10);
     }
 
     private void ResetPoints()
     {
-        points = idealPoints = 0;
+        inMemoryRepository.ResetPoints();
     }
-
 }
