@@ -6,7 +6,7 @@
 
 <h1>The points for this week:</h1>
 
-<p role="status">@inMemoryRepository.Points/@inMemoryRepository.IdealPoints</p>
+<p role="status">@repository.Points/@repository.IdealPoints</p>
 
 <button class="btn btn-primary" @onclick="ContributeWith20Points">+20</button>
 <button class="btn btn-primary" @onclick="Miss20Points">-20</button>
@@ -17,30 +17,30 @@
 <button class="btn btn-primary" @onclick="ResetPoints">Reset points</button>
 
 @code {
-    private InMemoryRepository inMemoryRepository;
+    private InMemoryRepository repository;
     
     protected override void OnInitialized()
     {
-        inMemoryRepository = new InMemoryRepository();
+        repository = new InMemoryRepository();
     }
 
     private void ContributeWith20Points()
     {
-        inMemoryRepository.ContributeWith(20);
+        repository.ContributeWith(20);
     }
 
     private void Miss20Points()
     {
-        inMemoryRepository.AddIdealPoints(20);
+        repository.AddIdealPoints(20);
     }
 
     private void ContributeWithBonus()
     {
-        inMemoryRepository.ContributeWith(10);
+        repository.ContributeWith(10);
     }
 
     private void ResetPoints()
     {
-        inMemoryRepository.ResetPoints();
+        repository.ResetPoints();
     }
 }
