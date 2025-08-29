@@ -9,6 +9,7 @@
 
 <button class="btn btn-primary" @onclick="ContributeWith20Points">+20</button>
 <button class="btn btn-primary" @onclick="Miss20Points">-20</button>
+<button class="btn btn-primary" @onclick="ContributeWithBonus">Bonus!</button>
 
 @code {
     private int points = 0;
@@ -25,4 +26,9 @@
         idealPoints += 20;
     }
 
+    private void ContributeWithBonus()
+    {
+        points += 10;
+        idealPoints += 10;
+    }
 }
