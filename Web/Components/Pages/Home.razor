@@ -8,6 +8,7 @@
 <p role="status">@points/@idealPoints</p>
 
 <button class="btn btn-primary" @onclick="ContributeWith20Points">+20</button>
+<button class="btn btn-primary" @onclick="Miss20Points">-20</button>
 
 @code {
     private int points = 0;
@@ -18,4 +19,10 @@
         points += 20;
         idealPoints += 20;
     }
+
+    private void Miss20Points()
+    {
+        idealPoints += 20;
+    }
+
 }
