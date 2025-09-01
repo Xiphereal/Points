@@ -5,7 +5,7 @@
 
 <h1>The points for this week:</h1>
 
-<p role="status">@repository.Points/@repository.IdealPoints</p>
+<p role="status">@repository.Points/@repository.IdealPoints (@Percentage()%)</p>
 
 <button class="btn btn-primary" @onclick="ContributeWith20Points">+20</button>
 <button class="btn btn-primary" @onclick="Miss20Points">-20</button>
@@ -42,4 +42,15 @@
     {
         repository.ResetPoints();
     }
+
+    private decimal Percentage()
+    {
+        if (repository.IdealPoints == 0)
+            return 0;
+
+        var percentageBeforeRounding = (float)repository.Points / repository.IdealPoints * 100;
+
+        return Math.Round((decimal)percentageBeforeRounding, decimals: 2);
+    }
+
 }
