@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using Web.Repositories
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime JsRuntime
 
 <PageTitle>Points</PageTitle>
 
@@ -41,7 +41,7 @@
 
     private async Task ResetPoints()
     {
-        if (!await JSRuntime.InvokeAsync<bool>("confirm", "Do you want to reset the points?"))
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", "Do you want to reset the points?"))
             return;
         
         repository.ResetPoints();
