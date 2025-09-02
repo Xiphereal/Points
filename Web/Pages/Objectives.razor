@@ -1,0 +1,35 @@
+﻿@page "/Objectives"
+
+<h3>Objectives</h3>
+
+<input placeholder="New objective" @bind="newObjective" />
+<button @onclick="AddObjective">Add objective</button>
+
+<br/>
+<br/>
+
+@if (!objectives.Any())
+{
+    <p>There is no objective yet. Try and set your first!</p>
+}
+
+<ul>
+    @foreach (var objective in objectives)
+    {
+        <li>@objective</li>
+    }
+</ul>
+
+@code {
+    private readonly List<string> objectives = [];
+    private string? newObjective;
+ 
+    private void AddObjective()
+    {
+        if (newObjective is null)
+            return;
+        
+        objectives.Add(newObjective);
+        newObjective = null;
+    }
+}
