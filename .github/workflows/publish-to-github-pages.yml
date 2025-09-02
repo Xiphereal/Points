@@ -24,10 +24,6 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o release
 
-      - name: Rewrite base URL to support project pages
-        run: |
-          sed -i 's|<base href=""|<base href="/${{ github.event.repository.name }}/"|g' release/wwwroot/index.html
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
