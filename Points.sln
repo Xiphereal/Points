@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{1B84E47A-CB08-4A5D-8A06-ED7B56E31446}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerlessFunctions", "ServerlessFunctions\ServerlessFunctions.csproj", "{5409E377-0B88-4865-9C8D-9BF3A8904255}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerlessFunctions.Tests", "ServerlessFunctions.Tests\ServerlessFunctions.Tests.csproj", "{A47847A5-027F-4557-8734-8994BB5BC211}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{1B84E47A-CB08-4A5D-8A06-ED7B56E31446}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B84E47A-CB08-4A5D-8A06-ED7B56E31446}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B84E47A-CB08-4A5D-8A06-ED7B56E31446}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5409E377-0B88-4865-9C8D-9BF3A8904255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5409E377-0B88-4865-9C8D-9BF3A8904255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5409E377-0B88-4865-9C8D-9BF3A8904255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5409E377-0B88-4865-9C8D-9BF3A8904255}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A47847A5-027F-4557-8734-8994BB5BC211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A47847A5-027F-4557-8734-8994BB5BC211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A47847A5-027F-4557-8734-8994BB5BC211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A47847A5-027F-4557-8734-8994BB5BC211}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
