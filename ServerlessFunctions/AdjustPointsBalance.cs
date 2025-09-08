@@ -1,3 +1,4 @@
+using System.Text.Json.Nodes;
 using Amazon.Lambda.Core;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -13,8 +14,8 @@ public class AdjustPointsBalance
     /// <param name="input">The event for the Lambda function handler to process.</param>
     /// <param name="context">The ILambdaContext that provides methods for logging and describing the Lambda environment.</param>
     /// <returns></returns>
-    public string FunctionHandler(string input, ILambdaContext context)
+    public void FunctionHandler(JsonNode  input, ILambdaContext context)
     {
-        return input.ToUpper();
+        Console.WriteLine("SDfsdkfjsdlkjflkdjf");
     }
 }

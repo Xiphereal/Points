@@ -10,9 +10,5 @@ public class AdjustPointsBalanceTest
     {
         var function = new AdjustPointsBalance();
         var context = new TestLambdaContext();
-        
-        var upperCase = function.FunctionHandler("hello world", context);
-
-        Assert.Equal("HELLO WORLD", upperCase);
     }
 }
