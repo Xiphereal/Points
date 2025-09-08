@@ -5,7 +5,7 @@ using Amazon.Lambda.Core;
 
 namespace ServerlessFunctions;
 
-public class Function
+public class AdjustPointsBalance
 {
     /// <summary>
     /// A simple function that takes a string and does a ToUpper

@@ -3,12 +3,12 @@ using Amazon.Lambda.TestUtilities;
 
 namespace ServerlessFunctions.Tests;
 
-public class FunctionTest
+public class AdjustPointsBalanceTest
 {
     [Fact]
     public void TestToUpperFunction()
     {
-        var function = new Function();
+        var function = new AdjustPointsBalance();
         var context = new TestLambdaContext();
         
         var upperCase = function.FunctionHandler("hello world", context);
