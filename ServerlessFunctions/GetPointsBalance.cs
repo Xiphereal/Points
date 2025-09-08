@@ -1,12 +1,13 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 using Amazon.Lambda.Core;
+using DTOs;
 using Npgsql;
 using static ServerlessFunctions.Utils;
 
 namespace ServerlessFunctions;
 
-public class AdjustPointsBalance
+public class GetPointsBalance
 {
     /// <summary>
     /// A simple function that takes a string and does a ToUpper
@@ -14,7 +15,9 @@ public class AdjustPointsBalance
     /// <param name="input">The event for the Lambda function handler to process.</param>
     /// <param name="context">The ILambdaContext that provides methods for logging and describing the Lambda environment.</param>
     /// <returns></returns>
-    public async Task FunctionHandler(JsonNode input, ILambdaContext context)
+    public async Task<PointsBalanceDto?> FunctionHandler(
+        JsonNode input,
+        ILambdaContext context)
     {
         var rdsSecretAsJson = JsonDocument.Parse(await GetRdsSecret());
         var connectionString =
@@ -46,10 +49,14 @@ public class AdjustPointsBalance
             var points = reader.GetInt32(1);
             var idealPoints = reader.GetInt32(2);
             Console.WriteLine($"{points}/{idealPoints}");
+
+            return new PointsBalanceDto(Points: points, IdealPoints: idealPoints);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
         }
+
+        return null;
     }
 }

@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerlessFunctions", "Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerlessFunctions.Tests", "ServerlessFunctions.Tests\ServerlessFunctions.Tests.csproj", "{A47847A5-027F-4557-8734-8994BB5BC211}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTOs", "DTOs\DTOs.csproj", "{EDB1EAAD-E5C7-448A-B40E-35A745F414D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{A47847A5-027F-4557-8734-8994BB5BC211}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A47847A5-027F-4557-8734-8994BB5BC211}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A47847A5-027F-4557-8734-8994BB5BC211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDB1EAAD-E5C7-448A-B40E-35A745F414D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB1EAAD-E5C7-448A-B40E-35A745F414D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB1EAAD-E5C7-448A-B40E-35A745F414D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB1EAAD-E5C7-448A-B40E-35A745F414D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

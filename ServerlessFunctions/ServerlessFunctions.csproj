@@ -17,4 +17,7 @@
     <PackageReference Include="AWSSDK.SecretsManager" Version="4.0.1.1" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DTOs\DTOs.csproj" />
+  </ItemGroup>
 </Project>
