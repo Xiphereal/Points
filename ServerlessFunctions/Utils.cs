@@ -1,11 +1,28 @@
 ﻿using System.Text.Json;
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
+using Npgsql;
 
 namespace ServerlessFunctions;
 
 public static class Utils
 {
+    public static async Task<string> BuildConnectionStringForRds()
+    {
+        var rdsSecretAsJson = JsonDocument.Parse(await GetRdsSecret());
+        var connectionString =
+            new NpgsqlConnectionStringBuilder
+            {
+                Host = GetStringProperty(rdsSecretAsJson, "host"),
+                Port = GetIntProperty(rdsSecretAsJson, "port"),
+                Database = GetStringProperty(rdsSecretAsJson, "dbInstanceIdentifier"),
+                Username = GetStringProperty(rdsSecretAsJson, "username"),
+                Password = GetStringProperty(rdsSecretAsJson, "password"),
+                SslMode = SslMode.Require,
+            }.ConnectionString;
+        return connectionString;
+    }
+
     public static async Task<string> GetRdsSecret()
     {
         var secretName = Environment.GetEnvironmentVariable("RDS_SECRET_NAME");

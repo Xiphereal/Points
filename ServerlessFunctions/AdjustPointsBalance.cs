@@ -16,17 +16,7 @@ public class AdjustPointsBalance
     /// <returns></returns>
     public async Task FunctionHandler(JsonNode input, ILambdaContext context)
     {
-        var rdsSecretAsJson = JsonDocument.Parse(await GetRdsSecret());
-        var connectionString =
-            new NpgsqlConnectionStringBuilder
-            {
-                Host = GetStringProperty(rdsSecretAsJson, "host"),
-                Port = GetIntProperty(rdsSecretAsJson, "port"),
-                Database = GetStringProperty(rdsSecretAsJson, "dbInstanceIdentifier"),
-                Username = GetStringProperty(rdsSecretAsJson, "username"),
-                Password = GetStringProperty(rdsSecretAsJson, "password"),
-                SslMode = SslMode.Require,
-            }.ConnectionString;
+        var connectionString = await BuildConnectionStringForRds();
 
         try
         {

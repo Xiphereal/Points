@@ -19,17 +19,7 @@ public class GetPointsBalance
         JsonNode input,
         ILambdaContext context)
     {
-        var rdsSecretAsJson = JsonDocument.Parse(await GetRdsSecret());
-        var connectionString =
-            new NpgsqlConnectionStringBuilder
-            {
-                Host = GetStringProperty(rdsSecretAsJson, "host"),
-                Port = GetIntProperty(rdsSecretAsJson, "port"),
-                Database = GetStringProperty(rdsSecretAsJson, "dbInstanceIdentifier"),
-                Username = GetStringProperty(rdsSecretAsJson, "username"),
-                Password = GetStringProperty(rdsSecretAsJson, "password"),
-                SslMode = SslMode.Require,
-            }.ConnectionString;
+        var connectionString = await BuildConnectionStringForRds();
 
         try
         {
@@ -48,7 +38,6 @@ public class GetPointsBalance
 
             var points = reader.GetInt32(1);
             var idealPoints = reader.GetInt32(2);
-            Console.WriteLine($"{points}/{idealPoints}");
 
             return new PointsBalanceDto(Points: points, IdealPoints: idealPoints);
         }
