@@ -10,12 +10,9 @@ public class AdjustPointsBalance
 {
     public async Task FunctionHandler(JsonNode input, ILambdaContext context)
     {
-        var connectionString = await BuildConnectionStringForRds();
-
         try
         {
-            var dataSource = new NpgsqlDataSourceBuilder(connectionString).Build();
-            var connection = await dataSource.OpenConnectionAsync();
+            var connection = await OpenConnectionToRds();
 
             const string sql = @"SELECT * FROM ""Period""";
             await using var command = new NpgsqlCommand(sql, connection);

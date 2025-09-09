@@ -7,6 +7,14 @@ namespace ServerlessFunctions;
 
 public static class Utils
 {
+    public static async Task<NpgsqlConnection> OpenConnectionToRds()
+    {
+        var connectionString = await BuildConnectionStringForRds();
+
+        var dataSource = new NpgsqlDataSourceBuilder(connectionString).Build();
+        return await dataSource.OpenConnectionAsync();
+    }
+
     public static async Task<string> BuildConnectionStringForRds()
     {
         var rdsSecretAsJson = JsonDocument.Parse(await GetRdsSecret());
@@ -23,7 +31,7 @@ public static class Utils
         return connectionString;
     }
 
-    public static async Task<string> GetRdsSecret()
+    private static async Task<string> GetRdsSecret()
     {
         var secretName = Environment.GetEnvironmentVariable("RDS_SECRET_NAME");
         var region = Environment.GetEnvironmentVariable("AWS_REGION");
@@ -39,12 +47,12 @@ public static class Utils
         return secret.SecretString;
     }
 
-    public static string GetStringProperty(JsonDocument jsonDocument, string propertyName)
+    private static string GetStringProperty(JsonDocument jsonDocument, string propertyName)
     {
         return jsonDocument.RootElement.GetProperty(propertyName).GetString()!;
     }
 
-    public static int GetIntProperty(JsonDocument jsonDocument, string propertyName)
+    private static int GetIntProperty(JsonDocument jsonDocument, string propertyName)
     {
         return jsonDocument.RootElement.GetProperty(propertyName).GetInt32()!;
     }
