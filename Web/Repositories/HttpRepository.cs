@@ -3,13 +3,13 @@ using DTOs;
 
 namespace Web.Repositories;
 
-public class HttpRepository
+public class HttpRepository(string baseUrl)
 {
     private readonly HttpClient httpClient = new();
 
     public async Task<PointsBalanceDto> GetPointsBalance()
     {
-        var response = await httpClient.GetAsync($"{GetBaseUrl()}/GetPointsBalance");
+        var response = await httpClient.GetAsync($"{baseUrl}/GetPointsBalance");
 
         return await response.Content.ReadAsAsync<PointsBalanceDto>();
     }
@@ -23,13 +23,8 @@ public class HttpRepository
             IdealPoints: previousPointsBalance.IdealPoints + points);
 
         await httpClient.PostAsJsonAsync(
-            $"{GetBaseUrl()}/AdjustPointsBalance",
+            $"{baseUrl}/AdjustPointsBalance",
             adjustedPointsBalance);
-    }
-
-    private static string? GetBaseUrl()
-    {
-        return Environment.GetEnvironmentVariable("BASE_URL");
     }
 
     public async Task AddIdealPoints(int howMany)
@@ -41,14 +36,14 @@ public class HttpRepository
             IdealPoints: previousPointsBalance.IdealPoints + howMany);
 
         await httpClient.PostAsJsonAsync(
-            $"{GetBaseUrl()}/AdjustPointsBalance",
+            $"{baseUrl}/AdjustPointsBalance",
             adjustedPointsBalance);
     }
 
     public async Task ResetPoints()
     {
         await httpClient.PostAsJsonAsync(
-            $"{GetBaseUrl()}/AdjustPointsBalance",
+            $"{baseUrl}/AdjustPointsBalance",
             PointsBalanceDto.Empty());
     }
 }

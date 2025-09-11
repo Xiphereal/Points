@@ -19,9 +19,10 @@
 @code {
     private HttpRepository repository;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        repository = new HttpRepository();
+        var baseUrl = await JsRuntime.InvokeAsync<string>("() => window._env_.BASE_URL");
+        repository = new HttpRepository(baseUrl);
     }
 
     private async Task ContributeWith20Points()

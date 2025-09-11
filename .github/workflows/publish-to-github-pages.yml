@@ -21,6 +21,10 @@ jobs:
         with:
           dotnet-version: 9.0.x 
 
+      - name: Set BASE_URL to 'wwwroot/env.js' 
+        run: |
+          echo "window._env_ = { BASE_URL: '${{ secrets.BASE_URL }}' };" > wwwroot/env.js
+
       - name: Publish
         run: dotnet publish -c Release -o release
 
