@@ -11,9 +11,6 @@ public class AdjustPointsBalance
 {
     public async Task FunctionHandler(PointsBalanceDto pointsBalance, ILambdaContext context)
     {
-        var newPoints = pointsBalance.Points;
-        var newIdealPoints = pointsBalance.IdealPoints;
-        
         try
         {
             var connection = await OpenConnectionToRds();
@@ -23,12 +20,12 @@ public class AdjustPointsBalance
                 SET points = @points, ideal_points = @ideal_points
                 WHERE id = 1";
             await using var command = new NpgsqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@points", newPoints);
-            command.Parameters.AddWithValue("@ideal_points", newIdealPoints);
+            command.Parameters.AddWithValue("@points", pointsBalance.Points);
+            command.Parameters.AddWithValue("@ideal_points", pointsBalance.IdealPoints);
 
             var rowsAffected = await command.ExecuteNonQueryAsync();
             
-            Console.WriteLine($"New points: {newPoints} | New ideal points: {newIdealPoints}" );
+            Console.WriteLine($"New points: {pointsBalance.Points} | New ideal points: {pointsBalance.IdealPoints}" );
             Console.WriteLine($"Rows affected: {rowsAffected}");
         }
         catch (Exception ex)
