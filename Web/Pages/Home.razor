@@ -6,7 +6,7 @@
 
 <h1>The points for this week:</h1>
 
-<p role="status">@repository.Points/@repository.IdealPoints (@Percentage()%)</p>
+<p role="status">@(async () => await PresentStatus())</p>
 
 <button class="btn btn-primary" @onclick="ContributeWith20Points">+20</button>
 <button class="btn btn-primary" @onclick="Miss20Points">-20</button>
@@ -17,26 +17,26 @@
 <button class="btn btn-primary" @onclick="ResetPoints">Reset points</button>
 
 @code {
-    private InMemoryRepository repository;
+    private HttpRepository repository;
 
     protected override void OnInitialized()
     {
-        repository = new InMemoryRepository();
+        repository = new HttpRepository();
     }
 
-    private void ContributeWith20Points()
+    private async Task ContributeWith20Points()
     {
-        repository.ContributeWith(20);
+        await repository.ContributeWith(20);
     }
 
-    private void Miss20Points()
+    private async Task Miss20Points()
     {
-        repository.AddIdealPoints(20);
+        await repository.AddIdealPoints(20);
     }
 
-    private void ContributeWithBonus()
+    private async Task ContributeWithBonus()
     {
-        repository.ContributeWith(10);
+        await repository.ContributeWith(10);
     }
 
     private async Task ResetPoints()
@@ -44,15 +44,25 @@
         if (!await JsRuntime.InvokeAsync<bool>("confirm", "Do you want to reset the points?"))
             return;
         
-        repository.ResetPoints();
+        await repository.ResetPoints();
     }
 
-    private decimal Percentage()
+    private async Task<string> PresentStatus()
     {
-        if (repository.IdealPoints == 0)
+        var pointsBalance = await repository.GetPointsBalance();
+        var percentage = await Percentage();
+        
+        return $"{pointsBalance.Points}/{pointsBalance.IdealPoints} ({percentage}%)";
+    }
+
+    private async Task<decimal> Percentage()
+    {
+        var pointsBalance = await repository.GetPointsBalance();
+        
+        if (pointsBalance.IdealPoints == 0)
             return 0;
 
-        var percentageBeforeRounding = (float)repository.Points / repository.IdealPoints * 100;
+        var percentageBeforeRounding = (float)pointsBalance.Points! / pointsBalance.IdealPoints! * 100;
 
         return Math.Round((decimal)percentageBeforeRounding, decimals: 2);
     }

@@ -1,3 +1,21 @@
 ﻿namespace DTOs;
 
-public record PointsBalanceDto(int? Points, int? IdealPoints);
+public record PointsBalanceDto
+{
+    public static PointsBalanceDto Empty() => new(0, 0);
+
+    public PointsBalanceDto(int? Points, int? IdealPoints)
+    {
+        this.Points = Points;
+        this.IdealPoints = IdealPoints;
+    }
+
+    public int? Points { get; init; }
+    public int? IdealPoints { get; init; }
+
+    public void Deconstruct(out int? Points, out int? IdealPoints)
+    {
+        Points = this.Points;
+        IdealPoints = this.IdealPoints;
+    }
+}
