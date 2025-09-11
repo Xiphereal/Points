@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Amazon.Lambda.Core;
+using DTOs;
 using Npgsql;
 using static ServerlessFunctions.Utils;
 
@@ -8,25 +9,27 @@ namespace ServerlessFunctions;
 
 public class AdjustPointsBalance
 {
-    public async Task FunctionHandler(JsonNode input, ILambdaContext context)
+    public async Task FunctionHandler(PointsBalanceDto pointsBalance, ILambdaContext context)
     {
+        var newPoints = pointsBalance.Points;
+        var newIdealPoints = pointsBalance.IdealPoints;
+        
         try
         {
             var connection = await OpenConnectionToRds();
 
-            const string sql = @"SELECT * FROM ""Period""";
+            const string sql = @"
+                UPDATE ""Period"" 
+                SET points = @points, ideal_points = @ideal_points
+                WHERE id = 1";
             await using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@points", newPoints);
+            command.Parameters.AddWithValue("@ideal_points", newIdealPoints);
 
-            await using var reader = await command.ExecuteReaderAsync();
-            if (!await reader.ReadAsync())
-                throw new ArgumentException("There is no row");
-
-            if (reader.Rows > 1)
-                throw new ArgumentException("There are more than a single row");
-
-            var points = reader.GetInt32(1);
-            var idealPoints = reader.GetInt32(2);
-            Console.WriteLine($"{points}/{idealPoints}");
+            var rowsAffected = await command.ExecuteNonQueryAsync();
+            
+            Console.WriteLine($"New points: {newPoints} | New ideal points: {newIdealPoints}" );
+            Console.WriteLine($"Rows affected: {rowsAffected}");
         }
         catch (Exception ex)
         {
