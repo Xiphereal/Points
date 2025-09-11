@@ -10,12 +10,17 @@ namespace ServerlessFunctions;
 
 public class AdjustPointsBalance
 {
+    private static readonly JsonSerializerOptions JsonSerializerOptions =
+        new() { PropertyNameCaseInsensitive = true };
+
     public async Task<APIGatewayProxyResponse> FunctionHandler(
-        PointsBalanceDto? pointsBalance,
+        APIGatewayProxyRequest request,
         ILambdaContext context)
     {
-        if (ValidateBody(pointsBalance, out var response))
+        if (ValidateBody(request, out var response))
             return response!;
+
+        var pointsBalance = DeserializePointsBalance(request);
 
         try
         {
@@ -26,8 +31,8 @@ public class AdjustPointsBalance
                 SET points = @points, ideal_points = @ideal_points
                 WHERE id = 1";
             await using var command = new NpgsqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@points", pointsBalance.Points);
-            command.Parameters.AddWithValue("@ideal_points", pointsBalance.IdealPoints);
+            command.Parameters.AddWithValue("@points", pointsBalance.Points!);
+            command.Parameters.AddWithValue("@ideal_points", pointsBalance.IdealPoints!);
 
             var rowsAffected = await command.ExecuteNonQueryAsync();
 
@@ -52,10 +57,28 @@ public class AdjustPointsBalance
         };
     }
 
+    private static PointsBalanceDto DeserializePointsBalance(APIGatewayProxyRequest request)
+    {
+        if (string.IsNullOrEmpty(request.Body))
+            throw new ArgumentException();
+
+        return JsonSerializer.Deserialize<PointsBalanceDto>(
+            request.Body,
+            JsonSerializerOptions)!;
+    }
+
     private static bool ValidateBody(
-        PointsBalanceDto? pointsBalance,
+        APIGatewayProxyRequest request,
         out APIGatewayProxyResponse? response)
     {
+        Console.WriteLine("Body" + request.Body);
+        PointsBalanceDto? pointsBalance = null;
+
+        if (!string.IsNullOrEmpty(request.Body))
+        {
+            pointsBalance = DeserializePointsBalance(request);
+        }
+
         if (pointsBalance is null)
         {
             const string pointsBalanceIsNull =
