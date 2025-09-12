@@ -22,7 +22,7 @@ public class HttpRepository(string baseUrl)
             Points: previousPointsBalance.Points + points,
             IdealPoints: previousPointsBalance.IdealPoints + points);
 
-        await httpClient.PostAsJsonAsync(
+        await httpClient.PutAsJsonAsync(
             $"{baseUrl}/AdjustPointsBalance",
             adjustedPointsBalance);
     }
@@ -35,14 +35,14 @@ public class HttpRepository(string baseUrl)
             Points: previousPointsBalance.Points,
             IdealPoints: previousPointsBalance.IdealPoints + howMany);
 
-        await httpClient.PostAsJsonAsync(
+        await httpClient.PutAsJsonAsync(
             $"{baseUrl}/AdjustPointsBalance",
             adjustedPointsBalance);
     }
 
     public async Task ResetPoints()
     {
-        await httpClient.PostAsJsonAsync(
+        await httpClient.PutAsJsonAsync(
             $"{baseUrl}/AdjustPointsBalance",
             PointsBalanceDto.Empty());
     }
