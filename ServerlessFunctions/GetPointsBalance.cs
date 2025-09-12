@@ -13,9 +13,11 @@ public class GetPointsBalance
         JsonNode input,
         ILambdaContext context)
     {
+        NpgsqlConnection? connection = null;
+        
         try
         {
-            var connection = await OpenConnectionToRds();
+            connection = await OpenConnectionToRds();
 
             const string sql = @"SELECT * FROM ""Period""";
             await using var command = new NpgsqlCommand(sql, connection);
@@ -35,6 +37,10 @@ public class GetPointsBalance
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            await connection?.CloseAsync()!;
         }
 
         return null;

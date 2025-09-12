@@ -22,9 +22,10 @@ public class AdjustPointsBalance
 
         var pointsBalance = DeserializePointsBalance(request);
 
+        NpgsqlConnection? connection = null;
         try
         {
-            var connection = await OpenConnectionToRds();
+            connection = await OpenConnectionToRds();
 
             const string sql = @"
                 UPDATE ""Period"" 
@@ -49,6 +50,10 @@ public class AdjustPointsBalance
             {
                 StatusCode = 500
             };
+        }
+        finally
+        {
+            await connection?.CloseAsync()!;
         }
 
         return new APIGatewayProxyResponse
