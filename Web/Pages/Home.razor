@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using DTOs
 @using Web.Repositories
 @inject IJSRuntime JsRuntime
 
@@ -54,15 +55,12 @@
     private async Task<string> PresentPointsBalance()
     {
         var pointsBalance = await repository.GetPointsBalance();
-        var percentage = await Percentage();
-        
-        return $"{pointsBalance.Points}/{pointsBalance.IdealPoints} ({percentage}%)";
+
+        return $"{pointsBalance.Points}/{pointsBalance.IdealPoints} ({Percentage(pointsBalance)}%)";
     }
 
-    private async Task<decimal> Percentage()
+    private static decimal Percentage(PointsBalanceDto pointsBalance)
     {
-        var pointsBalance = await repository.GetPointsBalance();
-        
         if (pointsBalance.IdealPoints == 0)
             return 0;
 
