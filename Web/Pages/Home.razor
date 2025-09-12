@@ -32,24 +32,28 @@
     private async Task ContributeWith20Points()
     {
         await repository.ContributeWith(20);
+        pointsBalancePresentation = await PresentPointsBalance();
     }
 
     private async Task Miss20Points()
     {
         await repository.AddIdealPoints(20);
+        pointsBalancePresentation = await PresentPointsBalance();
     }
 
     private async Task ContributeWithBonus()
     {
         await repository.ContributeWith(10);
+        pointsBalancePresentation = await PresentPointsBalance();
     }
 
     private async Task ResetPoints()
     {
         if (!await JsRuntime.InvokeAsync<bool>("confirm", "Do you want to reset the points?"))
             return;
-        
+
         await repository.ResetPoints();
+        pointsBalancePresentation = await PresentPointsBalance();
     }
 
     private async Task<string> PresentPointsBalance()
