@@ -27,6 +27,8 @@ public static class Utils
                 Username = GetStringProperty(rdsSecretAsJson, "username"),
                 Password = GetStringProperty(rdsSecretAsJson, "password"),
                 SslMode = SslMode.Require,
+                Pooling = true,
+                MaxPoolSize = 20,
             }.ConnectionString;
         return connectionString;
     }
