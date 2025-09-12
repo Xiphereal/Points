@@ -23,7 +23,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var baseUrl = await JsRuntime.InvokeAsync<string>("() => window._env_.BASE_URL");
+        var baseUrl = await JsRuntime.InvokeAsync<string>("eval", "window._env_.BASE_URL");
         repository = new HttpRepository(baseUrl);
         pointsBalancePresentation = await PresentPointsBalance();
     }
