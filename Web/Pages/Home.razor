@@ -7,44 +7,69 @@
 
 <h1>The points for this week:</h1>
 
-<p role="status">@pointsBalancePresentation</p>
+@if (waitingForResponse)
+{
+    <p role="status">Updating...</p>
+}
+else
+{
+    <p role="status">@pointsBalancePresentation</p>
+}
 
-<button class="btn btn-primary" @onclick="ContributeWith20Points">+20</button>
-<button class="btn btn-primary" @onclick="Miss20Points">-20</button>
-<button class="btn btn-primary" @onclick="ContributeWithBonus">Bonus!</button>
+<button class="btn btn-primary" @onclick="ContributeWith20Points" disabled="@waitingForResponse">+20</button>
+<button class="btn btn-primary" @onclick="Miss20Points" disabled="@waitingForResponse">-20</button>
+<button class="btn btn-primary" @onclick="ContributeWithBonus" disabled="@waitingForResponse">Bonus!</button>
 
 <br/>
 
 <button class="btn btn-primary" @onclick="ResetPoints">Reset points</button>
 
 @code {
-    private HttpRepository repository;
+    private HttpRepository repository = null!;
 
-    private string pointsBalancePresentation;
+    private string pointsBalancePresentation = string.Empty;
+
+    private bool waitingForResponse;
 
     protected override async Task OnInitializedAsync()
     {
+        waitingForResponse = true;
+        
         var baseUrl = await JsRuntime.InvokeAsync<string>("eval", "window._env_.BASE_URL");
         repository = new HttpRepository(baseUrl);
         pointsBalancePresentation = await PresentPointsBalance();
+
+        waitingForResponse = false;
     }
 
     private async Task ContributeWith20Points()
     {
+        waitingForResponse = true;
+        
         await repository.ContributeWith(20);
         pointsBalancePresentation = await PresentPointsBalance();
+        
+        waitingForResponse = false;
     }
 
     private async Task Miss20Points()
     {
+        waitingForResponse = true;
+
         await repository.AddIdealPoints(20);
         pointsBalancePresentation = await PresentPointsBalance();
+        
+        waitingForResponse = false;
     }
 
     private async Task ContributeWithBonus()
     {
+        waitingForResponse = true;
+        
         await repository.ContributeWith(10);
         pointsBalancePresentation = await PresentPointsBalance();
+        
+        waitingForResponse = false;
     }
 
     private async Task ResetPoints()
@@ -52,8 +77,12 @@
         if (!await JsRuntime.InvokeAsync<bool>("confirm", "Do you want to reset the points?"))
             return;
 
+        waitingForResponse = true;
+        
         await repository.ResetPoints();
         pointsBalancePresentation = await PresentPointsBalance();
+        
+        waitingForResponse = false;
     }
 
     private async Task<string> PresentPointsBalance()
@@ -72,4 +101,5 @@
 
         return Math.Round((decimal)percentageBeforeRounding, decimals: 2);
     }
+
 }
