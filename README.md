@@ -23,7 +23,7 @@ classDiagram
     class Goal
     Group --> "1" Reward : set a
     Group --> "1" Goal : set a
-    Reward --> Goal : is redeemed by a achieving a
+    Reward --> Goal : is redeemed by achieving a
     Goal *-- "*" Point
 ```
 
