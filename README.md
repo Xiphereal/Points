@@ -38,5 +38,5 @@ classDiagram
 - If a Group achieves a Goal, the set Reward is redeemed.
 - A Person can set their own Objectives.
 - A Person can perform a Contribution of Points.
-- A Person may incur in a Penarly of Points for missing an Objective Contribution.
+- A Person may incur in a Penalty of Points for missing an Objective Contribution.
 - A Group can reset the achieved Points. 
