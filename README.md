@@ -29,7 +29,7 @@ classDiagram
 
 ## Exemplary user stories
 
-- A Group set a Goal of Points and a Reward.
+- A Group set a Goal of Points for a Reward.
 - If a Group achieves a Goal, the set Reward is redeemed.
 - A Person can set their own Objectives.
 - A Person can perform a Contribution of Points.
