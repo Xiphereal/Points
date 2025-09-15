@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
+using DTOs;
 using Npgsql;
 
 namespace ServerlessFunctions;
@@ -57,5 +58,23 @@ public static class Utils
     private static int GetIntProperty(JsonDocument jsonDocument, string propertyName)
     {
         return jsonDocument.RootElement.GetProperty(propertyName).GetInt32()!;
+    }
+
+    public static async Task<PointsBalanceDto> GetPointsBalanceFromDatabase(NpgsqlConnection connection)
+    {
+        const string sql = @"SELECT * FROM ""Period""";
+        await using var command = new NpgsqlCommand(sql, connection);
+
+        await using var reader = await command.ExecuteReaderAsync();
+        if (!await reader.ReadAsync())
+            throw new ArgumentException("There is no row");
+
+        if (reader.Rows > 1)
+            throw new ArgumentException("There are more than a single row");
+
+        var points = reader.GetInt32(1);
+        var idealPoints = reader.GetInt32(2);
+
+        return new PointsBalanceDto(points, idealPoints);
     }
 }

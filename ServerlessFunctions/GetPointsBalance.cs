@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 using Amazon.Lambda.Core;
 using DTOs;
 using Npgsql;
@@ -19,20 +18,7 @@ public class GetPointsBalance
         {
             connection = await OpenConnectionToRds();
 
-            const string sql = @"SELECT * FROM ""Period""";
-            await using var command = new NpgsqlCommand(sql, connection);
-
-            await using var reader = await command.ExecuteReaderAsync();
-            if (!await reader.ReadAsync())
-                throw new ArgumentException("There is no row");
-
-            if (reader.Rows > 1)
-                throw new ArgumentException("There are more than a single row");
-
-            var points = reader.GetInt32(1);
-            var idealPoints = reader.GetInt32(2);
-
-            return new PointsBalanceDto(Points: points, IdealPoints: idealPoints);
+            return await GetPointsBalanceFromDatabase(connection);
         }
         catch (Exception ex)
         {

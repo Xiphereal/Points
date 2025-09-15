@@ -16,34 +16,33 @@ public class HttpRepository(string baseUrl)
 
     public async Task ContributeWith(int points)
     {
-        var previousPointsBalance = await GetPointsBalance();
-
-        var adjustedPointsBalance = new PointsBalanceDto(
-            Points: previousPointsBalance.Points + points,
-            IdealPoints: previousPointsBalance.IdealPoints + points);
+        var pointsBalanceIncrement = new PointsBalanceDto(
+            Points: points,
+            IdealPoints: points);
 
         await httpClient.PutAsJsonAsync(
             $"{baseUrl}/AdjustPointsBalance",
-            adjustedPointsBalance);
+            pointsBalanceIncrement);
     }
 
     public async Task AddIdealPoints(int howMany)
     {
-        var previousPointsBalance = await GetPointsBalance();
-
-        var adjustedPointsBalance = new PointsBalanceDto(
-            Points: previousPointsBalance.Points,
-            IdealPoints: previousPointsBalance.IdealPoints + howMany);
+        var pointsBalanceIncrement = new PointsBalanceDto(
+            Points: 0,
+            IdealPoints: howMany);
 
         await httpClient.PutAsJsonAsync(
             $"{baseUrl}/AdjustPointsBalance",
-            adjustedPointsBalance);
+            pointsBalanceIncrement);
     }
 
     public async Task ResetPoints()
     {
+        var existingPointsBalance = await GetPointsBalance();
+        var pointsBalanceDecrement = existingPointsBalance.ToDecrement();
+        
         await httpClient.PutAsJsonAsync(
             $"{baseUrl}/AdjustPointsBalance",
-            PointsBalanceDto.Empty());
+            pointsBalanceDecrement);
     }
 }

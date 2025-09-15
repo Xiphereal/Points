@@ -18,4 +18,13 @@ public record PointsBalanceDto
         Points = this.Points;
         IdealPoints = this.IdealPoints;
     }
+
+    public PointsBalanceDto ToDecrement()
+    {
+        return new PointsBalanceDto(
+            ToNegative(Points!.Value),
+            ToNegative(IdealPoints!.Value));
+    }
+
+    private static int ToNegative(int number) => Math.Abs(number) * -1;
 }

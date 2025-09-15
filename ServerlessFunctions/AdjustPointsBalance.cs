@@ -1,5 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using DTOs;
@@ -27,20 +27,16 @@ public class AdjustPointsBalance
         {
             connection = await OpenConnectionToRds();
 
-            const string sql = @"
-                UPDATE ""Period"" 
-                SET points = @points, ideal_points = @ideal_points
-                WHERE id = 1";
-            await using var command = new NpgsqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@points", pointsBalance.Points!);
-            command.Parameters.AddWithValue("@ideal_points", pointsBalance.IdealPoints!);
+            var existingPointsBalance = await GetPointsBalanceFromDatabase(connection);
 
-            var rowsAffected = await command.ExecuteNonQueryAsync();
+            var adjustedPoints = existingPointsBalance.Points! + pointsBalance.Points!;
+            var adjustedIdealPoints =
+                existingPointsBalance.IdealPoints! + pointsBalance.IdealPoints!;
 
-            Console.WriteLine(
-                $"New points: {pointsBalance.Points} | " +
-                $"New ideal points: {pointsBalance.IdealPoints}");
-            Console.WriteLine($"Rows affected: {rowsAffected}");
+            await PersistAdjustedPointsBalanceToDatabase(
+                connection,
+                adjustedPoints,
+                adjustedIdealPoints);
         }
         catch (Exception ex)
         {
@@ -60,6 +56,27 @@ public class AdjustPointsBalance
         {
             StatusCode = 204
         };
+    }
+
+    private static async Task PersistAdjustedPointsBalanceToDatabase(
+        NpgsqlConnection connection,
+        [DisallowNull] int? adjustedPoints,
+        [DisallowNull] int? adjustedIdealPoints)
+    {
+        const string sql = @"
+            UPDATE ""Period"" 
+            SET points = @points, ideal_points = @ideal_points
+            WHERE id = 1";
+        await using var command = new NpgsqlCommand(sql, connection);
+        command.Parameters.AddWithValue("@points", adjustedPoints);
+        command.Parameters.AddWithValue("@ideal_points", adjustedIdealPoints);
+
+        var rowsAffected = await command.ExecuteNonQueryAsync();
+
+        Console.WriteLine(
+            $"New points: {adjustedPoints} | " +
+            $"New ideal points: {adjustedIdealPoints}");
+        Console.WriteLine($"Rows affected: {rowsAffected}");
     }
 
     private static PointsBalanceDto DeserializePointsBalance(APIGatewayProxyRequest request)
