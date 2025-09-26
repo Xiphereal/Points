@@ -45,4 +45,20 @@ public class HttpRepository(string baseUrl)
             $"{baseUrl}/AdjustPointsBalance",
             pointsBalanceDecrement);
     }
+
+    public async Task<ActivityDto> GetLastActivity()
+    {
+        try
+        {
+            var response = await httpClient.GetAsync($"{baseUrl}/GetActivity");
+
+            return await response.Content.ReadAsAsync<ActivityDto>();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            
+            return new ActivityDto([]);
+        }
+    }
 }

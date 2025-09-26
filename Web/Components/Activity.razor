@@ -1,0 +1,58 @@
+﻿@using Web.Repositories
+@inject IJSRuntime JsRuntime
+
+<h3>Activity</h3>
+
+@if (waitingForResponse)
+{
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <br/>
+}
+else
+{
+    @if (!activity.Any())
+    {
+        <p>There is no available activity to show yet...</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var activityEvent in activity)
+            {
+                <li>@activityEvent</li>
+            }
+        </ul>
+    }
+}
+
+@code {
+    private HttpRepository repository = null!;
+
+    readonly List<string> activity = [];
+    private bool waitingForResponse;
+
+    protected override async Task OnInitializedAsync()
+    {
+        waitingForResponse = true;
+
+        var baseUrl = await JsRuntime.InvokeAsync<string>("eval", "window._env_.BASE_URL");
+        repository = new HttpRepository(baseUrl);
+        await PresentActivity();
+
+        waitingForResponse = false;
+    }
+
+    private async Task PresentActivity()
+    {
+        var lastActivity = await repository.GetLastActivity();
+
+        activity.Clear();
+        activity.AddRange(lastActivity.Events);
+        
+        activity.Add("20 points has been contributed!");
+        activity.Add("20 points has been missed...");
+        activity.Add("piuhtflkdjgsdfgfggg");
+    }
+}

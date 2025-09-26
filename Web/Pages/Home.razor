@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using DTOs
+@using Web.Components
 @using Web.Repositories
 @inject IJSRuntime JsRuntime
 
@@ -26,6 +27,8 @@ else
 <br/>
 
 <button class="btn btn-primary" @onclick="ResetPoints" disabled="@waitingForResponse">Reset points</button>
+
+<Activity/>
 
 @code {
     private HttpRepository repository = null!;
