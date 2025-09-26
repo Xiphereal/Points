@@ -37,6 +37,9 @@ public class AdjustPointsBalance
                 connection,
                 adjustedPoints,
                 adjustedIdealPoints);
+            await RegisterEventInTheActivity(
+                connection,
+                pointsBalance);
         }
         catch (Exception ex)
         {
@@ -56,6 +59,27 @@ public class AdjustPointsBalance
         {
             StatusCode = 204
         };
+    }
+
+    private async Task RegisterEventInTheActivity(
+        NpgsqlConnection connection,
+        PointsBalanceDto pointsBalance)
+    {
+        var content = pointsBalance.IsContribution()
+            ? $"{pointsBalance.Points} have been contributed."
+            : $"{pointsBalance.PointsInAbsolute} have been missed...";
+        
+        const string sql = @"
+            INSERT INTO ""Activity"" 
+            (content, period_id)
+            VALUES (@content, 1)";
+        await using var command = new NpgsqlCommand(sql, connection);
+        command.Parameters.AddWithValue("@content", content);
+        
+        var rowsAffected = await command.ExecuteNonQueryAsync();
+
+        Console.WriteLine($"Registered Event: {content}");
+        Console.WriteLine($"Rows affected: {rowsAffected}");
     }
 
     private static async Task PersistAdjustedPointsBalanceToDatabase(

@@ -12,6 +12,7 @@ public record PointsBalanceDto
 
     public int? Points { get; init; }
     public int? IdealPoints { get; init; }
+    public int PointsInAbsolute => Math.Abs(Points!.Value);
 
     public void Deconstruct(out int? Points, out int? IdealPoints)
     {
@@ -27,4 +28,7 @@ public record PointsBalanceDto
     }
 
     private static int ToNegative(int number) => Math.Abs(number) * -1;
+
+    /// <returns> True if the balance is of a contribution; false if it is a miss. </returns>
+    public bool IsContribution() => Points >= 0;
 }
