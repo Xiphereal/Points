@@ -16,7 +16,7 @@ public static class Utils
         return await dataSource.OpenConnectionAsync();
     }
 
-    public static async Task<string> BuildConnectionStringForRds()
+    private static async Task<string> BuildConnectionStringForRds()
     {
         var rdsSecretAsJson = JsonDocument.Parse(await GetRdsSecret());
         var connectionString =
