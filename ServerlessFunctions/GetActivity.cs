@@ -34,14 +34,14 @@ public class GetActivity
 
     private async Task<ActivityDto?> GetActivityFromDatabase(NpgsqlConnection connection)
     {
-        const string sql = @"SELECT * FROM ""Activity""";
+        const string sql = @"SELECT * FROM ""Activity"" WHERE period_id = 1";
         await using var command = new NpgsqlCommand(sql, connection);
 
         await using var reader = await command.ExecuteReaderAsync();
 
         List<string> activity = [];
         while (await reader.ReadAsync())
-            activity.Add(reader.GetString(1));
+            activity.Add(reader.GetString(2));
         
         return new ActivityDto(activity);
     }
