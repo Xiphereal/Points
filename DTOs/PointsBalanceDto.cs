@@ -12,7 +12,6 @@ public record PointsBalanceDto
 
     public int? Points { get; init; }
     public int? IdealPoints { get; init; }
-    public int PointsInAbsolute => Math.Abs(Points!.Value);
 
     public void Deconstruct(out int? Points, out int? IdealPoints)
     {
@@ -30,8 +29,6 @@ public record PointsBalanceDto
     private static int ToNegative(int number) => Math.Abs(number) * -1;
 
     public bool IsContribution() => Points > 0;
-
-    public bool IsReset() => Points < 0;
-
     public bool IsMiss() => Points == 0;
+    public bool IsReset() => Points < 0;
 }

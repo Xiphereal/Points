@@ -83,9 +83,9 @@ public class AdjustPointsBalance
     private static string CreateContentBasedOnKindOfEvent(PointsBalanceDto pointsBalance)
     {
         if (pointsBalance.IsContribution())
-            return $"{pointsBalance.Points} have been contributed.";
+            return $"{pointsBalance.Points} Points have been contributed.";
         if (pointsBalance.IsMiss())
-            return $"{pointsBalance.PointsInAbsolute} have been missed...";
+            return $"{pointsBalance.IdealPoints} Points have been missed...";
         if (pointsBalance.IsReset())
             return "The Points have been reset";
 
