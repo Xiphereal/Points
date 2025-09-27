@@ -19,6 +19,6 @@ public record EventDto
 
     public override string ToString()
     {
-        return $"[{OccurredAt}] {Content}";
+        return $"[{OccurredAt.ToLocalTime()}] {Content}";
     }
 }
