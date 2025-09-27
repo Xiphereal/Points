@@ -1,3 +1,3 @@
 ﻿namespace DTOs;
 
-public record ActivityDto(IReadOnlyList<string> Events);
+public record ActivityDto(IReadOnlyList<EventDto> Events);

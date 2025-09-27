@@ -13,7 +13,7 @@ public class GetActivity
         ILambdaContext context)
     {
         NpgsqlConnection? connection = null;
-        
+
         try
         {
             connection = await OpenConnectionToRds();
@@ -39,10 +39,12 @@ public class GetActivity
 
         await using var reader = await command.ExecuteReaderAsync();
 
-        List<string> activity = [];
+        List<EventDto> events = [];
         while (await reader.ReadAsync())
-            activity.Add(reader.GetString(2));
-        
-        return new ActivityDto(activity);
+            events.Add(new EventDto(
+                content: reader.GetString(2),
+                occurredAt: reader.GetDateTime(1)));
+
+        return new ActivityDto(events);
     }
 }
