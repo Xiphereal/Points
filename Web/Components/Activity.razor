@@ -50,7 +50,7 @@ else
 
         activity.Clear();
         activity.AddRange(lastActivity.Events
-            .OrderBy(x => x.OccurredAt)
+            .OrderByDescending(x => x.OccurredAt)
             .Select(x => x.ToString()));
     }
 }
