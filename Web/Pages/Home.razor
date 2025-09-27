@@ -31,12 +31,12 @@ else
 <br/>
 <br/>
 
-<Activity @ref="activity"/>
+<Activity @key="@eachTimeThisChangesValueTheActivityWillBeRefreshed"/>
 
 @code {
     private HttpRepository repository = null!;
 
-    private Activity activity = null!;
+    private int eachTimeThisChangesValueTheActivityWillBeRefreshed = 1;
     
     private string pointsBalancePresentation = string.Empty;
 
@@ -100,7 +100,7 @@ else
     {
         var pointsBalance = await repository.GetPointsBalance();
 
-        activity.Refresh();
+        eachTimeThisChangesValueTheActivityWillBeRefreshed++;
 
         return $"{pointsBalance.Points}/{pointsBalance.IdealPoints} ({Percentage(pointsBalance)}%)";
     }

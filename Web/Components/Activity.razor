@@ -44,12 +44,6 @@ else
         waitingForResponse = false;
     }
 
-    public void Refresh()
-    {
-        // Forces re-rendering.
-        StateHasChanged();
-    }
-    
     private async Task PresentActivity()
     {
         var lastActivity = await repository.GetLastActivity();
