@@ -49,6 +49,8 @@ else
         var lastActivity = await repository.GetLastActivity();
 
         activity.Clear();
-        activity.AddRange(lastActivity.Events.Select(x => x.ToString()));
+        activity.AddRange(lastActivity.Events
+            .OrderBy(x => x.OccurredAt)
+            .Select(x => x.ToString()));
     }
 }
