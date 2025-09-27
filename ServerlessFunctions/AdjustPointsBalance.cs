@@ -65,9 +65,7 @@ public class AdjustPointsBalance
         NpgsqlConnection connection,
         PointsBalanceDto pointsBalance)
     {
-        var content = pointsBalance.IsContribution()
-            ? $"{pointsBalance.Points} have been contributed."
-            : $"{pointsBalance.PointsInAbsolute} have been missed...";
+        var content = CreateContentBasedOnKindOfEvent(pointsBalance);
         
         const string sql = @"
             INSERT INTO ""Activity"" 
@@ -80,6 +78,19 @@ public class AdjustPointsBalance
 
         Console.WriteLine($"Registered Event: {content}");
         Console.WriteLine($"Rows affected: {rowsAffected}");
+    }
+
+    private static string CreateContentBasedOnKindOfEvent(PointsBalanceDto pointsBalance)
+    {
+        if (pointsBalance.IsContribution())
+            return $"{pointsBalance.Points} have been contributed.";
+        if (pointsBalance.IsMiss())
+            return $"{pointsBalance.PointsInAbsolute} have been missed...";
+        if (pointsBalance.IsReset())
+            return "The Points have been reset";
+
+        throw new NotSupportedException(
+            $"The {pointsBalance} represent an Event not yet recognized or is erroneous");
     }
 
     private static async Task PersistAdjustedPointsBalanceToDatabase(

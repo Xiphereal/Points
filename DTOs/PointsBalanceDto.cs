@@ -29,6 +29,9 @@ public record PointsBalanceDto
 
     private static int ToNegative(int number) => Math.Abs(number) * -1;
 
-    /// <returns> True if the balance is of a contribution; false if it is a miss. </returns>
-    public bool IsContribution() => Points >= 0;
+    public bool IsContribution() => Points > 0;
+
+    public bool IsReset() => Points < 0;
+
+    public bool IsMiss() => Points == 0;
 }
